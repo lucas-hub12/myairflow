@@ -9,7 +9,7 @@ with DAG(
     # schedule= "* * * * *",
     schedule="0 * * * *",
     #schedule="@hourly",
-    start_date=datetime(2025,3,10)
+    start_date=datetime(2025,3,11)
          ) as dag:
     start = EmptyOperator(task_id="start")
     end = EmptyOperator(task_id="end")
