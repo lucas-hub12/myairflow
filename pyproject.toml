@@ -1,6 +1,6 @@
 [project]
 name = "myairflow"
-version = "0.1.0"
+version = "0.1.2"
 description = "my first airflow"
 authors = [
     {name = "lucas_hub12", email = "hyeonggyunbae@gmail.com"},
