@@ -16,30 +16,30 @@ def generate_bash_commands(columns: list):
         cmds.append(f'echo "{c}{padding} : ====> {{{{ {c} }}}}"')
     return "\n".join(cmds)
 
-import requests
-import os
 
-def send_noti(msg):
-    WEBHOOK_ID = os.getenv('DISCORD_WEBHOOK_ID')
-    WEBHOOK_TOKEN = os.getenv('DISCORD_WEBHOOK_TOKEN')
-    WEBHOOK_URL = f"https://discordapp.com/api/webhooks/{WEBHOOK_ID}/{WEBHOOK_TOKEN}"
-    data = { "content":msg }
-    response = requests.post(WEBHOOK_URL, json=data)
+# def send_noti(msg):
+#     import requests
+#     import os
+#     WEBHOOK_ID = os.getenv('WEBHOOK_ID')
+#     WEBHOOK_TOKEN = os.getenv('WEBHOOK_TOKEN')
+#     WEBHOOK_URL = f"https://discordapp.com/api/webhooks/{WEBHOOK_ID}/{WEBHOOK_TOKEN}"
+#     data = { "content": msg }
+#     response = requests.post(WEBHOOK_URL, json=data)
 
-    if response.status_code == 204:
-        print("메시지가 성공적으로 전송되었습니다.")
-    else:
-        print(f"에러 발생: {response.status_code}, {response.text}")
-        
+#     if response.status_code == 204:
+#         print("메시지가 성공적으로 전송되었습니다.")
+#     else:
+#         print(f"에러 발생: {response.status_code}, {response.text}")
+
+
 def print_kwargs(**kwargs):
     print("kwargs====>", kwargs)
     for k, v in kwargs.items():
         print(f"{k} : {v}")
     msg = f"{kwargs['dag'].dag_display_name} {kwargs['task'].task_id} {kwargs['data_interval_start'].in_tz('Asia/Seoul').strftime('%Y%m%d%H')} OK/LUCAS"
-    from myairflow.notify import send_noti
+    from myairflow.send_notify import send_noti
     send_noti(msg)
 
-local_tz = pendulum.timezone("Asia/Seoul")
 
 # DAG 정의
 with DAG(
@@ -88,13 +88,6 @@ with DAG(
             echo "data_interval_start : {{data_interval_start.in_tz('Asia/Seoul').strftime('%Y%m%d%H')}}",
             mkdir -p ~/data/seoul/{{data_interval_start.in_tz('Asia/Seoul').strftime('%Y/%m/%d/%H')}}
         """)
-    # # send_notification = EmptyOperator(
-    #     task_id="send_notification",
-    #     python_callable=send_discord_alert,
-    #      trigger_rule=TriggerRule.ONE_FAILED)
-    
-
-    # end = EmptyOperator(task_id="end", trigger_rule=TriggerRule.ALL_SUCCESS)
 
     start >> b1
     b1 >> [b2_1, b2_2]

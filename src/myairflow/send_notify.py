@@ -3,8 +3,8 @@ import requests
 import os
 
 def send_noti(msg):
-    WEBHOOK_ID = os.getenv('DISCORD_WEBHOOK_ID')
-    WEBHOOK_TOKEN = os.getenv('DISCORD_WEBHOOK_TOKEN')
+    WEBHOOK_ID = os.getenv('WEBHOOK_ID')
+    WEBHOOK_TOKEN = os.getenv('WEBHOOK_TOKEN')
     WEBHOOK_URL = f"https://discordapp.com/api/webhooks/{WEBHOOK_ID}/{WEBHOOK_TOKEN}"
     data = { "content":msg }
     response = requests.post(WEBHOOK_URL, json=data)
