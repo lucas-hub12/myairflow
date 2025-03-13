@@ -1,5 +1,6 @@
 # myetl function
 import pandas as pd
+import pyarrow.parquet as pq
 import os
 
 CSV_PATH = "/home/lucas/data/data.csv"
@@ -10,10 +11,10 @@ def load_data_pq(b):
     if os.path.exists(CSV_PATH):
         df = pd.read_csv(CSV_PATH)
         df.to_parquet(PARQUET_PATH, engine="pyarrow")
-        print(f"✅ CSV → Parquet 변환 완료: {PARQUET_PATH}")
+        print(f"CSV → Parquet 변환 완료: {PARQUET_PATH}")
         return True
     else:
-        print(f"❌ 오류: CSV 파일을 찾을 수 없습니다! ({CSV_PATH})")
+        print(f"오류: CSV 파일을 찾을 수 없습니다! ({CSV_PATH})")
         return False
 
 def save_agg_csv(a):
