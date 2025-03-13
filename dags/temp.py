@@ -48,7 +48,6 @@ with DAG(
     start_date=pendulum.datetime(2025, 3, 11, tz="Asia/Seoul"),
     catchup=False
 ) as dag:
-    
     start = EmptyOperator(task_id="start")
     end = EmptyOperator(task_id="end")
     send_notification = PythonOperator(
