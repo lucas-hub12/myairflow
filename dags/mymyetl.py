@@ -12,37 +12,36 @@ with DAG (
     catchup=False,
     max_active_runs=1,
 ) as dag:
+    
     start = EmptyOperator(task_id="start")
      
     make_data = BashOperator(
           task_id="make_data",
-          bash_command="""
-          /home/lucas/airflow/make_data.sh /home/lucas/data/{{ data_interval_start.in_tz('Asia/Seoul').strftime('%Y%m%d%H') }}
-          """)
-    def fn_load_data(data_interval_start):
+          bash_command=
+          "bash /home/lucas/airflow/make_data.sh /home/lucas/data/{{ data_interval_start.in_tz('Asia/Seoul').strftime('%Y%m%d%H') }}"
+          )
+    def fn_load_data(dis):
           from myairflow.func import load_data_pq
-          from myairflow.func import save_agg_csv
+          load_data_pq(dis)
 
 
     load_data = PythonVirtualenvOperator(
           task_id="load_data",
           python_callable=fn_load_data,  # ✅ 함수명 직접 전달
-          requirements=["pandas", "pyarrow"],  # ✅ "pands" → "pandas" 수정
-          system_site_packages=True,  # ✅ Airflow 패키지 사용 가능하도록 설정
-          op_kwargs={"dis_path": "{{data_interval_start.in_tz('Asia/Seoul').strftime('%Y/%m/%d/%H')}}"}
-     )
+          requirements=["git+https://github.com/lucas-hub12/myairflow.git@0.1.4"],  # ✅ "pands" → "pandas" 수정
+          op_args=["{{ data_interval_start.in_tz('Asia/Seoul').strftime('%Y/%m/%d/%H') }}"]
+    )
 
-    def fn_save_agg(data_interval_start):  
-          from myairflow.func import load_data_pq
+    def fn_save_agg(dis):  
           from myairflow.func import save_agg_csv
-
+          save_agg_csv(dis)
+        
     agg_data = PythonVirtualenvOperator(
           task_id="agg_data",
           python_callable=fn_save_agg,  # ✅ 함수명 직접 전달
-          requirements=["pandas", "pyarrow"],  # ✅ "pands" → "pandas" 수정
-          system_site_packages=True,  # ✅ Airflow 패키지 사용 가능하도록 설정
-          op_args=["{{data_interval_start.in_tz('Asia/Seoul').strftime('%Y/%m/%d/%H')}}"]
-     )
+          requirements=["git+https://github.com/lucas-hub12/myairflow.git@0.1.4"],
+          op_args=["{{ data_interval_start.in_tz('Asia/Seoul').strftime('%Y/%m/%d/%H') }}"]
+    )
 
     end = EmptyOperator(task_id="end")
 
