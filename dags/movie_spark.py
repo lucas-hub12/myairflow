@@ -25,7 +25,7 @@ with DAG(
     tags=["spark", "sbumit", "movie"],
 ) as dag:
     SPARK_HOME="/home/lucas/app/spark-3.5.1-bin-hadoop3"
-    SCRIPT_BASE="/home/locas/code/myairflow/pyspark"
+    SCRIPT_BASE="/home/lucas/code/myairflow/pyspark"
     META_PATH="/home/lucas/data/movie_spark/meta"
     RAW_BASE="/home/lucas/data/movie_after/dailyboxoffice"
 
