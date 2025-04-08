@@ -20,7 +20,7 @@ with DAG(
     description="movie spark sbumit",
     schedule="10 10 * * *",
     start_date=datetime(2024, 1, 1),
-    end_date=datetime(2024, 1, 2),
+    end_date=datetime(2025, 1, 2),
     catchup=True,
     tags=["spark", "sbumit", "movie"],
 ) as dag:
